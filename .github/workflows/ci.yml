@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint & type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e ".[dev]" --quiet
+      - run: ruff check src/
+      - run: black --check src/
+      - run: mypy src/ --ignore-missing-imports
+
+  test:
+    name: Test suite (mocked APIs)
+    runs-on: ubuntu-latest
+    env:
+      # Fake keys so Settings validates — real calls are mocked in tests
+      ANTHROPIC_API_KEY: sk-ant-test-key
+      OPENAI_API_KEY:    sk-test-key
+      GITHUB_TOKEN:      ghp_test_token
+      GITHUB_REPO:       owner/repo
+      QDRANT_URL:        http://localhost:6333
+      LANGCHAIN_API_KEY: ls__test
+    services:
+      qdrant:
+        image: qdrant/qdrant:latest
+        ports: ["6333:6333"]
+        options: >-
+          --health-cmd "curl -f http://localhost:6333/healthz"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e ".[dev]" --quiet
+      - run: |
+          pytest src/tests/ -v \
+            --cov=src --cov-report=xml --cov-report=term-missing \
+            --cov-fail-under=65 \
+            -x
+      - uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: coverage.xml
+
+  docker-build:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t resolver:ci .

@@ -1,0 +1,12 @@
+[
+  {"issue_number":101,"difficulty":"easy","description":"ZeroDivisionError not handled","expected_changed_files":["myrepo/math_utils.py"]},
+  {"issue_number":102,"difficulty":"easy","description":"None check missing causes AttributeError","expected_changed_files":["myrepo/core/parser.py"]},
+  {"issue_number":103,"difficulty":"medium","description":"Off-by-one error in pagination","expected_changed_files":["myrepo/api/views.py"]},
+  {"issue_number":104,"difficulty":"medium","description":"Race condition in cache","expected_changed_files":["myrepo/cache.py"]},
+  {"issue_number":105,"difficulty":"medium","description":"Regex rejects valid emails","expected_changed_files":["myrepo/validators.py"]},
+  {"issue_number":106,"difficulty":"medium","description":"Missing error handling in upload","expected_changed_files":["myrepo/api/upload.py"]},
+  {"issue_number":107,"difficulty":"hard","description":"SQL injection in search","expected_changed_files":["myrepo/db/queries.py"]},
+  {"issue_number":108,"difficulty":"hard","description":"Memory leak in WebSocket handler","expected_changed_files":["myrepo/ws/handler.py"]},
+  {"issue_number":109,"difficulty":"hard","description":"Circular import breaks init","expected_changed_files":["myrepo/models/__init__.py","myrepo/utils.py"]},
+  {"issue_number":110,"difficulty":"hard","description":"JWT expiry check allows expired tokens","expected_changed_files":["myrepo/auth/tokens.py"]}
+]

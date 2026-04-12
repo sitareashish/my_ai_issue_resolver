@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+htmlcov/
+coverage.xml
+.coverage
+/tmp/resolver_checkpoints.db
+evaluation_report.json
+workspace_clones/
